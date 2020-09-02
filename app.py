@@ -1,6 +1,7 @@
 from flask import Flask,request
 from flask import render_template,Response
 import time
+import re
 import sys
 import os
 import requests
@@ -12,6 +13,8 @@ import datetime
 import os
 from flask_migrate import Migrate
 from flask_cors import cross_origin,CORS
+import string
+import random
 config = configparser.ConfigParser()
 
 currentPath = os.path.dirname(os.path.abspath(__file__))
@@ -23,17 +26,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
-db.init_app(app)
-
-
-
 class shortURL(db.Model):
-	DateTime = db.Column(db.String(255), primary_key=True)
+	id = db.Column(db.Integer, primary_key=True)
 	URL = db.Column(db.String(255))
 	MappingURL = db.Column(db.String(255))
   
-	def __init__(self, DateTime, URL):
-		self.DateTime = DateTime
+	def __init__(self,URL,MappingURL):
 		self.URL = URL
 		self.MappingURL = MappingURL
 
@@ -88,13 +86,26 @@ def index():
 @app.route("/UserShortUrl")
 def UserShortUrl():
 	_url = request.args.get('url')
-	print (_url)
-	findExistURL = shortURL.query.filter_by(MappingURL=_url) 
+	regex = "(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+	check_Url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', _url)
+	if len(check_Url) < 0:
+		return "URL錯誤，請輸入正確的網址"
+	findExistURL = shortURL.query.filter_by(MappingURL=_url).first()
 	if findExistURL == None:
+		randomString = [random.choice(string.ascii_uppercase) for i in range(5)]
+		compileURL = ''.join(randomString)
+		shortURL_DB = shortURL(URL = compileURL,MappingURL = _url)
+		db.session.add(shortURL_DB)
+		db.session.commit()
 		pass
 	else:
-		return findExistURL.first().URL
-	return _url
+		return "http://127.0.0.1:8000/" + findExistURL.URL
+	return "http://127.0.0.1:8000/" + compileURL
+
+@app.route("/")
+def redirectURL():
+	print ("OK")
+	pass
 
 @app.route("/orderList")
 def orderList():
