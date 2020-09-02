@@ -10,22 +10,20 @@ import configparser
 import threading
 import datetime
 import os
+from flask_migrate import Migrate
 from flask_cors import cross_origin,CORS
 config = configparser.ConfigParser()
 
 currentPath = os.path.dirname(os.path.abspath(__file__))
-config.read(currentPath + '/Config.ini')
-DatabaseIP = config.get('Setting','DatabaseIP')
-DBusername = config.get('Setting','DBusername')
-DBpassword = config.get('Setting','DBpassword')
 
 #------------------------------------------------------------------------------------------------------
 app = Flask(__name__)
 CORS(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://'+DBusername+':'+DBpassword+'@'+DatabaseIP+':3306/sensordb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
+db.init_app(app)
 
 
 
