@@ -1,10 +1,15 @@
-function ReadOrder() {
-// 	$.get("/orderList",
-// 		function(data) {
-// 		   	console.log(data);
-// 		}
-// 	);
+
+function getTextValue() {
+	userTypeUrl = (document.getElementById("url").value);
+	
+	$.get("/UserShortUrl",
+		{url : userTypeUrl},
+		function(data) {
+			console.log(data);
+			document.getElementById("response").innerText = data
+		}
+	);
 }
 $(document).ready(function(){
-	ReadOrder();
+	document.getElementById("confirm").addEventListener("click", getTextValue);
 });

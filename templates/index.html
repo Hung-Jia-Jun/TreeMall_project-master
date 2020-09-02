@@ -75,27 +75,30 @@
 					<ul class="nav nav-list"><li class="divider"></li></ul>
 				</a>
 		</div>
-		{% for i in oreders %}
+		{% for order in progressOrder %}
 			<div class="col-md-12 border">
 				<div class="row setcenter">
 					<div class="col-md-2 col-2" style="margin: auto;" align="center" >
-						<img width="100%" src="https://static.oopocket.com/store/iconTreemall@3x.png">
+						<!-- if order["name"]["status"]["code"] is 1 or order["name"]["status"]["code"] is 2 (./static/Disable.png) -->
+						<img width="100%" src={{ order["logo"] }}>
 					</div>
 					<div class="col-md-8  col-8 center">
 						<div class="row" >
 							<div class="col-md-8  col-10 " >
 								<established class="hh">
-									<font face="微軟正黑體">已成立</font>
+									<!-- 商品狀態 -->
+									<font face="微軟正黑體">{{ order["status"]["type"] }}</font>
 								</established>
 								<span class="hh mx-4">
-									<font face="微軟正黑體">預計出貨: 107/01/03</font>
+									<font face="微軟正黑體">預計出貨: {{ order["date"] }}</font>
 								</span>
 							</div>
 						</div>
 						<div class="row">
 							<div class="col-md-8  col-12">
 								<span class="hh">
-									<font face="微軟正黑體">{{ title }}</font>
+									<!-- 商品名稱 -->
+									<font face="微軟正黑體">{{ order["name"] }}</font>
 								</span>
 							</div>
 						</div>
@@ -105,7 +108,7 @@
 					</div>
 				</div>
 			</div>
-		   {% endfor %}
+		{% endfor %}
 		<div class="col-md-12 col-12 border" style=" text-align: center;" >
 			<nav class="navbar navbar-expand-lg navbar-light bg-light" align="center">
 				<a class="navbar-brand" style="margin: left;padding-bottom: -5;padding-bottom: 5px;margin-top: 0px;">
@@ -117,35 +120,40 @@
 					<ul class="nav nav-list"><li class="divider"></li></ul>
 				</a>
 		</div>
-		<div class="col-md-12 border">
-			<div class="row setcenter">
-				<div class="col-md-2 col-2" style="margin: auto;" align="center" >
-					<img width="100%" src="./static/Disable.png">
-				</div>
-				<div class="col-md-8  col-8 center">
-					<div class="row" >
-						<div class="col-md-8  col-10 " >
-							<established class="hh">
-								<font face="微軟正黑體">已成立</font>
-							</established>
-							<span class="hh mx-4">
-								<font face="微軟正黑體">預計出貨: 107/01/03</font>
-							</span>
+		{% for order in completedOrder %}
+			<div class="col-md-12 border">
+				<div class="row setcenter">
+					<div class="col-md-2 col-2" style="margin: auto;" align="center" >
+						<!-- if order["name"]["status"]["code"] is 1 or order["name"]["status"]["code"] is 2 (./static/Disable.png) -->
+						<img width="100%" src="./static/Disable.png">
+					</div>
+					<div class="col-md-8  col-8 center">
+						<div class="row" >
+							<div class="col-md-8  col-10 " >
+								<established class="hh">
+									<!-- 商品狀態 -->
+									<font face="微軟正黑體">{{ order["status"]["type"] }}</font>
+								</established>
+								<span class="hh mx-4">
+									<font face="微軟正黑體">預計出貨: {{ order["date"] }}</font>
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-8  col-12">
+								<span class="hh">
+									<!-- 商品名稱 -->
+									<font face="微軟正黑體">{{ order["name"] }}</font>
+								</span>
+							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-8  col-12">
-							<span class="hh">
-								<font face="微軟正黑體">BALMUDA The Toaster百慕達烤麵包機-黑色</font>
-							</span>
-						</div>
+					<div class="col-md-2  col-2 content">
+						<span class="h1" style="text-align:right; color:rgb(177, 177, 177)"> > </span>
 					</div>
-				</div>
-				<div class="col-md-2  col-2 content">
-					<span class="h1" style="text-align:right; color:rgb(177, 177, 177)"> > </span>
 				</div>
 			</div>
-		</div>
+		{% endfor %}
 		
 	</div>
 </body>

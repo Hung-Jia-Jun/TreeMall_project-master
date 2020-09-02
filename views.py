@@ -8,6 +8,7 @@ import json
 from flask_sqlalchemy import SQLAlchemy
 import configparser
 import threading
+import datetime
 import os
 from flask_cors import cross_origin,CORS
 config = configparser.ConfigParser()
@@ -30,27 +31,75 @@ db = SQLAlchemy(app)
 
 class shortURL(db.Model):
 	DateTime = db.Column(db.String(255), primary_key=True)
-	Data = db.Column(db.String(255))
-	MappingData = db.Column(db.String(255))
+	URL = db.Column(db.String(255))
+	MappingURL = db.Column(db.String(255))
   
-	def __init__(self, DateTime, Data):
+	def __init__(self, DateTime, URL):
 		self.DateTime = DateTime
-		self.Data = Data
-		self.MappingData = MappingData
-		
+		self.URL = URL
+		self.MappingURL = MappingURL
+
+def ROCYearConvert(orders,shiftYear):
+	for order in orders:
+		#民國年轉西元年
+		datelist = []
+		datelist = order["date"].split("/")
+		datelist[0] = str(int(datelist[0]) + shiftYear)
+		order["date"] = '/'.join(datelist)
+	return orders
+def sordbyDESC(orders):
+	orders = ROCYearConvert(orders,1911)
+	#先對所有order的list做排序，之後再依照這個datetime去抓取對應的order
+	sortDates = sorted([datetime.datetime.strptime(order["date"], "%Y/%m/%d") for order in orders])
+	
+	#排序完成的list
+	sortedOrder = []
+	for dt in sortDates:
+		for order in orders:
+			if datetime.datetime.strptime(order["date"], "%Y/%m/%d") == dt:
+				exist = False
+				for sort in sortedOrder:
+					if order['name'] == sort['name']:
+						exist = True
+				if exist == False:
+					sortedOrder.append(order)
+	#西元年轉民國年
+	sortedOrder = ROCYearConvert(sortedOrder,-1911)
+	return sortedOrder
+
+@app.route("/shorturl")
+def shorturl():
+	return render_template('shorturl.html')
 
 @app.route("/index")
 def index():
-	orederItem = queryCommandList()
-	orederCount = len(orederItem.json["orders"])
-	oreders=[]
-	for i in range(orederCount):
-		oreders.append(i)
-	return render_template('index.html',oreders = oreders)
+	orederItem = orderList()
+	oreders = orederItem.json["orders"]
+	progressOrder = []
+	completedOrder = []
+	for order in oreders:
+		if int(order["status"]["code"]) <= 2:
+			progressOrder.append(order)
+		else:
+			completedOrder.append(order)
+	progressOrder = sordbyDESC(progressOrder)
+	completedOrder = sordbyDESC(completedOrder)
+	return render_template('index.html',progressOrder = progressOrder,completedOrder=completedOrder)
 
-#取得當前指令的列表
+#取得用戶輸入的網址
+@app.route("/UserShortUrl")
+def UserShortUrl():
+	_url = request.args.get('url')
+	print (_url)
+	findExistURL = shortURL.query.filter_by(MappingURL=_url) 
+	if findExistURL == None:
+		pass
+	else:
+		return findExistURL.first().URL
+	return _url
+
 @app.route("/orderList")
-def queryCommandList():
+def orderList():
 	#依照ID排序
 	Orders ="""
 				{
