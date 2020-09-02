@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+	<style type="text/css">
+	.Pic_logo {
+		background-image: url(https://i.imgur.com/CbED5gn.png);
+		background-blend-mode: lighten;
+		background-size: cover;
+	}
+	hr {
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		border: 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.1);
+		}
+	established{
+		color:#00BB00;
+	}
+	
+	.border{
+		border-width:2px;
+		border-style:solid;
+		border-color:#E0E0E0;
+		padding:0.5px;
+	}
+	.content{
+		width: 25%;
+		line-height:25%;
+		margin: auto;
+	}
+	.center {
+    	position:absolute;top:20%;/* div高度的一半 */
+	}
+	@media (min-width: 375px) {  
+		.hh{font-size: 10px;}
+		img {
+        	width: 50px;
+    	}
+		.setcenter{
+			height:100px;
+		}
+	}
+	@media (min-width: 992px) { 
+		.hh{font-size: 25px;}
+		img {
+        	width: 120px;
+    	}
+		.setcenter{
+			height:180px;
+		}
+	}
+
+
+	</style>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<script src="/static/main.js"></script>
+</head>
+
+  <body>
+	<div class="container" id="container">
+		<div class="col-md-12 col-12 border" style=" text-align: center;" >
+			<nav class="navbar navbar-expand-lg navbar-light bg-light" align="center">
+				<a class="navbar-brand" style="margin: left;padding-bottom: -5;padding-bottom: 5px;margin-top: 0px;">
+					<div style="width:10px;height:30px;background-color:#00BB00;">
+						<span class="h4 mx-4 center" style="margin-bottom: 8px;margin-top: 3px;" align="center">
+							<font face="微軟正黑體">進行中</font>
+						</span>
+					</div>
+					<ul class="nav nav-list"><li class="divider"></li></ul>
+				</a>
+		</div>
+		{% for i in oreders %}
+			<div class="col-md-12 border">
+				<div class="row setcenter">
+					<div class="col-md-2 col-2" style="margin: auto;" align="center" >
+						<img width="100%" src="https://static.oopocket.com/store/iconTreemall@3x.png">
+					</div>
+					<div class="col-md-8  col-8 center">
+						<div class="row" >
+							<div class="col-md-8  col-10 " >
+								<established class="hh">
+									<font face="微軟正黑體">已成立</font>
+								</established>
+								<span class="hh mx-4">
+									<font face="微軟正黑體">預計出貨: 107/01/03</font>
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-8  col-12">
+								<span class="hh">
+									<font face="微軟正黑體">{{ title }}</font>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2  col-2 content">
+						<span class="h1" style="text-align:right; color:rgb(177, 177, 177)"> > </span>
+					</div>
+				</div>
+			</div>
+		   {% endfor %}
+		<div class="col-md-12 col-12 border" style=" text-align: center;" >
+			<nav class="navbar navbar-expand-lg navbar-light bg-light" align="center">
+				<a class="navbar-brand" style="margin: left;padding-bottom: -5;padding-bottom: 5px;margin-top: 0px;">
+					<div style="width:10px;height:30px;background-color:#00BB00;">
+						<span class="h4 mx-4 center" style="margin-bottom: 8px;margin-top: 3px;" align="center">
+							<font face="微軟正黑體">已完成</font>
+						</span>
+					</div>
+					<ul class="nav nav-list"><li class="divider"></li></ul>
+				</a>
+		</div>
+		<div class="col-md-12 border">
+			<div class="row setcenter">
+				<div class="col-md-2 col-2" style="margin: auto;" align="center" >
+					<img width="100%" src="./static/Disable.png">
+				</div>
+				<div class="col-md-8  col-8 center">
+					<div class="row" >
+						<div class="col-md-8  col-10 " >
+							<established class="hh">
+								<font face="微軟正黑體">已成立</font>
+							</established>
+							<span class="hh mx-4">
+								<font face="微軟正黑體">預計出貨: 107/01/03</font>
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-8  col-12">
+							<span class="hh">
+								<font face="微軟正黑體">BALMUDA The Toaster百慕達烤麵包機-黑色</font>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2  col-2 content">
+					<span class="h1" style="text-align:right; color:rgb(177, 177, 177)"> > </span>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</body>
+</html>
