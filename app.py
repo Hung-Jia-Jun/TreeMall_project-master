@@ -1,4 +1,4 @@
-from flask import Flask,request
+from flask import Flask,request,redirect
 from flask import render_template,Response
 import time
 import re
@@ -88,10 +88,12 @@ def UserShortUrl():
 	_url = request.args.get('url')
 	regex = "(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 	check_Url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', _url)
-	if len(check_Url) < 0:
+	if len(check_Url) == 0:
 		return "URL錯誤，請輸入正確的網址"
 	findExistURL = shortURL.query.filter_by(MappingURL=_url).first()
 	if findExistURL == None:
+		#26^5=11881376個短網址可以配給，以這個Project來說是夠用了
+		#剩下就是DB的query latency問題，到時候可以用cluster解決
 		randomString = [random.choice(string.ascii_uppercase) for i in range(5)]
 		compileURL = ''.join(randomString)
 		shortURL_DB = shortURL(URL = compileURL,MappingURL = _url)
@@ -99,8 +101,19 @@ def UserShortUrl():
 		db.session.commit()
 		pass
 	else:
-		return "http://127.0.0.1:8000/" + findExistURL.URL
-	return "http://127.0.0.1:8000/" + compileURL
+		return findExistURL.URL
+	return compileURL
+
+@app.route("/<url_key>")
+def redirect_to_url(url_key):
+    """
+    Check the url_key is in DB, redirect to original url.
+    """
+    url = shortURL.query.filter_by(URL=url_key).first()
+    if url is None:
+        return False
+    return redirect(url.MappingURL)
+
 
 @app.route("/")
 def redirectURL():
