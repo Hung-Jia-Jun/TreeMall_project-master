@@ -4,7 +4,6 @@ import time
 import re
 import sys
 import os
-import requests
 import json
 from flask_sqlalchemy import SQLAlchemy
 import configparser
