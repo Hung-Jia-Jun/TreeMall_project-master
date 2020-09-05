@@ -1,1 +1,2 @@
-docker run -itd -p 80:8000 treemall bash
+docker load --input treemall.tar
+docker run -d -p 80:8000 jason/treemall
