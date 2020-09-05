@@ -64,7 +64,7 @@ def sordbyDESC(orders):
 
 @app.route("/shorturl")
 def shorturl():
-	return render_template('shorturl.html')
+	return render_template('shortURL.html')
 
 @app.route("/index")
 def index():

@@ -1,0 +1,1 @@
+docker run -itd -p 80:8000 treemall bash
